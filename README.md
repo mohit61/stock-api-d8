@@ -7,7 +7,7 @@
 ## Google Summer of Code 2018 | Drupal
  
 #### Student: [Mohit Malik (mohit1604)](https://www.drupal.org/u/mohit1604)
-#### Mentors: - [skyred](https://www.drupal.org/u/skyredwang)  [bojanz](https://www.drupal.org/u/bojanz)
+#### Mentors: - [Vaibhav Jain](https://www.drupal.org/u/vaibhavjain) [skyred](https://www.drupal.org/u/skyredwang)  [bojanz](https://www.drupal.org/u/bojanz)
 
 ## Description:
 
