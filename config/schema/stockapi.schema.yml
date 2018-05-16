@@ -1,0 +1,18 @@
+stockapi.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    stockapi_vantage_apikey:
+      type: string
+    stockapi_decimals:
+      type: integer
+    stockapi_quotetype:
+      type: string
+    stockapi_fetch_last:
+      type: integer
+    stockapi_fetch:
+      type: integer
+    stockapi_fetch_first:
+      type: integer
+    stockapi_default_symbols:
+      type: string
