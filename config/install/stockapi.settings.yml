@@ -1,0 +1,7 @@
+stockapi_vantage_apikey: demo
+stockapi_decimals: 2
+stockapi_quotetype: basic
+stockapi_fetch_last: 0
+stockapi_fetch: 3600
+stockapi_fetch_first: 0
+stockapi_default_symbols: 'IBM AAPL AMZN DIS GOOG HPQ INTC GE NMX AGB FVI'
