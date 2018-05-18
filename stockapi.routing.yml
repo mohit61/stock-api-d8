@@ -1,0 +1,14 @@
+stockapi.page:
+  path: /stockapi
+  defaults:
+    _title: 'Stock API'
+    _controller: '\Drupal\stockapi\Controller\StockApiController::stockapi_page'
+  requirements:
+    _permission: 'access content'
+stockapi.admin_settings:
+  path: /admin/config/services/stockapi
+  defaults:
+    _title: 'Stock API settings'
+    _form: \Drupal\stockapi\Form\StockapiAdminSettings
+  requirements:
+    _permission: 'administer site configuration'
