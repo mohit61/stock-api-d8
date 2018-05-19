@@ -1,0 +1,9 @@
+stockapi.page:
+  route_name: stockapi.page
+  title: 'Stock API'
+  description: 'Stock Quotes'
+stockapi.admin_settings:
+  route_name: stockapi.admin_settings
+  title: 'Stock API settings'
+  description: 'Configure settings for StockAPI'
+  parent: system.admin_config_services
