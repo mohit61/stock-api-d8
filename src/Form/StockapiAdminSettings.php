@@ -86,9 +86,7 @@ class StockapiAdminSettings extends ConfigFormBase {
       '#title' => t('Number of decimals'),
       '#default_value' => \Drupal::config('stockapi.settings')->get('stockapi_decimals'),
       '#description' => t('Number of decimals displayed after the point.'),
-      '#element_validate' => [
-        'element_validate_integer_positive'
-        ],
+      '#min' => 0,
     ];
 
     $form['stockapi_vantage_apikey'] = [
