@@ -1,0 +1,580 @@
+<?php
+
+/**
+ * @file
+ * Contains the schema, install, and uninstall functions for StockAPI.
+ */
+
+/*
+ * Implements hook_schema().
+ */
+function stockapi_schema() {
+  $schema['stockapi'] = array(
+    'description' => 'A table to store stock information',
+    'fields' => array(
+      'symbol' => array(
+        'description' => 'Symbol',
+        'type' => 'varchar',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+        ),
+      'name' => array(
+        'description' => 'Company Name',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'last_trade_with_time' => array(
+        'description' => 'Last Trade (With Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'last_trade_price_only' => array(
+        'description' => 'Last Trade (Price Only)',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'last_trade_date' => array(
+        'description' => 'Last Trade Date',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'last_trade_time' => array(
+        'description' => 'Last Trade Time',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'last_trade_size' => array(
+        'description' => 'Last Trade Size',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'chg_and_pct_chg' => array(
+        'description' => 'Change and Percent Change',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'chg' => array(
+        'description' => 'Change',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'pct_chg' => array(
+        'description' => 'Change in Percent',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'ticker_trend' => array(
+        'description' => 'Ticker Trend',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'volume' => array(
+        'description' => 'Volume',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'avg_daily_volume' => array(
+        'description' => 'Average Daily Volume',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'more_info' => array(
+        'description' => 'More Info',
+        'type' => 'text',
+        'not null' => FALSE,
+        ),
+      'trade_links' => array(
+        'description' => 'Trade Links',
+        'type' => 'text',
+        'not null' => FALSE,
+        ),
+      'bid' => array(
+        'description' => 'Bid',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'bid_size' => array(
+        'description' => 'Bid Size',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'ask' => array(
+        'description' => 'Ask',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'ask_size' => array(
+        'description' => 'Ask Size',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'previous_close' => array(
+        'description' => 'Previous Close',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'open' => array(
+        'description' => 'Open',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'days_range' => array(
+        'description' => 'Day\'s Range',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      "52_week_range" => array(
+        'description' => '52-week Range',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'chg_52_week_low' => array(
+        'description' => 'Change From 52-week Low',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'pct_chg_from_52_wk_low' => array(
+        'description' => 'Percent Change From 52-wk Low',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'chg_from_52_wk_high' => array(
+        'description' => 'Change From 52-wk High',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'pct_chg_from_52_wk_high' => array(
+        'description' => 'Percent Change From 52-wk High',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'eps' => array(
+        'description' => 'Earnings/Share',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'pe_ratio' => array(
+        'description' => 'P/E Ratio',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'short_ratio' => array(
+        'description' => 'Short Ratio',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'dividend_pay_date' => array(
+        'description' => 'Dividend Pay Date',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'ex_dividend_date' => array(
+        'description' => 'Ex-Dividend Date',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'dividend_per_share' => array(
+        'description' => 'Dividend/Share',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'dividend_yield' => array(
+        'description' => 'Dividend Yield',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'float_shares' => array(
+        'description' => 'Float Shares',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'market_cap' => array(
+        'description' => 'Market Capitalization',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'one_yr_target_price' => array(
+        'description' => '1-yr Target Price',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'eps_est_current_yr' => array(
+        'description' => 'EPS Estimate Current Year',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'eps_est_next_year' => array(
+        'description' => 'EPS Estimate Next Year',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'eps_est_next_quarter' => array(
+        'description' => 'EPS Estimate Next Quarter',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'price_per_eps_est_current_year' => array(
+        'description' => 'Price/EPS Estimate Current Year',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'price_per_eps_est_next_year' => array(
+        'description' => 'Price/EPS Est. Next Year',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'peg_ratio' => array(
+        'description' => 'PEG Ratio',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'book_value' => array(
+        'description' => 'Book Value',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'price_per_book' => array(
+        'description' => 'Price/Book',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'price_per_sales' => array(
+        'description' => 'Price/Sales',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'ebitda' => array(
+        'description' => 'EBITDA',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      "50_day_moving_average" => array(
+        'description' => '50-day Moving Average',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'chg_frm_50_day_ma' => array(
+        'description' => 'Change From 50-day Moving Average',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'pct_chg_frm_50_day_ma' => array(
+        'description' => 'Percent Change From 50-day Moving Average',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      "200_day_moving_average" => array(
+        'description' => '200-day Moving Average',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'chg_frm_200_day_ma' => array(
+        'description' => 'Change From 200-day Moving Average',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'pct_chg_frm_200_day_ma' => array(
+        'description' => 'Percent Change From 200-day Moving Average',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'shares_owned' => array(
+        'description' => 'Shares Owned',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'price_paid' => array(
+        'description' => 'Price Paid',
+        'type' => 'float',
+        'not null' => FALSE,
+        'default' => 0,
+        ),
+      'commission' => array(
+        'description' => 'Commission',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'holdings_value' => array(
+        'description' => 'Holdings Value',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'days_value_change' => array(
+        'description' => 'Day\'s Value Change',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'holdings_gain_pct' => array(
+        'description' => 'Holdings Gain Percent',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'holdings_gain' => array(
+        'description' => 'Holdings Gain',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'trade_date' => array(
+        'description' => 'Trade Date',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'annualized_gain' => array(
+        'description' => 'Annualized Gain',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'highlimit' => array(
+        'description' => 'High Limit',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'lowlimit' => array(
+        'description' => 'Low limit',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'notes' => array(
+        'description' => 'Notes',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'last_trade_rt' => array(
+        'description' => 'Last Trade (Real-Time) with Time',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'bid_rt' => array(
+        'description' => 'Bid (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'ask_rt' => array(
+        'description' => 'Ask (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'pct_chg_rt' => array(
+        'description' => 'Change Percent (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'chg_rt' => array(
+        'description' => 'Change (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'holdings_value_rt' => array(
+        'description' => 'Holdings Value (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'days_value_chg_rt' => array(
+        'description' => 'Day\'s Value Change (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'holdings_gain_pct_rt' => array(
+        'description' => 'Holdings Gain Percent (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'holdings_gain_rt' => array(
+        'description' => 'Holdings Gain (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'days_range_rt' => array(
+        'description' => 'Day\'s Range (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'market_cap_rt' => array(
+        'description' => 'Market Cap (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'pe_rt' => array(
+        'description' => 'P/E (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'after_hours_change_rt' => array(
+        'description' => 'After Hours Change (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'order_book_rt' => array(
+        'description' => 'Order Book (Real-Time)',
+        'type' => 'varchar',
+        'length' => 75,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'exchange' => array(
+        'description' => 'Stock Exchange',
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => FALSE,
+        'default' => '',
+        ),
+      'updated' => array(
+        'description' => 'Last Update',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0),
+      ),
+      'primary key' => array('symbol'),
+    );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function stockapi_install() {
+  stockapi_cron();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stockapi_uninstall() {
+  \Drupal::getContainer()->get('config.factory')->getEditable('stockapi.settings')->clear('stockapi_quotetype')->save();
+  \Drupal::getContainer()->get('config.factory')->getEditable('stockapi.settings')->clear('stockapi_fetch')->save();
+  \Drupal::getContainer()->get('config.factory')->getEditable('stockapi.settings')->clear('stockapi_fetch_last')->save();
+  \Drupal::getContainer()->get('config.factory')->getEditable('stockapi.settings')->clear('stockapi_fetch_first')->save();
+}
+
+/**
+ * Delete the stockapi rows, 2.x needs them to be recreated, next cron run.
+ */
+function hook_update_8101() {
+  $result = db_truncate('stockapi')->execute();
+  return $result;
+}
