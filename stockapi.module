@@ -1,0 +1,167 @@
+<?php
+
+/**
+ * @file
+ *  API for retrieving stock information from Alpha Vantage.
+ */
+// TODO: Add historical data option.
+// TODO: Updates to default stockapi symbols
+
+
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Unicode;
+use Drupal\Component\Render\FormattableMarkup;
+
+
+module_load_include('inc', 'stockapi');
+
+
+/**
+ * Implements hook_cron().
+ */
+function stockapi_cron() {
+  if (REQUEST_TIME - \Drupal::config('stockapi.settings')->get('stockapi_fetch_last') >= \Drupal::config('stockapi.settings')->get('stockapi_fetch')) {
+    if (intval(\Drupal::config('stockapi.settings')->get('stockapi_fetch_first')) < 1) {
+      stockapi_fetch_symbols();
+    }
+    else {
+
+      $symbols = array();
+      $result = db_query('SELECT symbol FROM {stockapi} ORDER BY updated');
+      if (count($result)) {
+    foreach ($result as $data) {
+      $symbols[] = $data->symbol;
+    }
+      }
+
+      $default_symbols = \Drupal::config('stockapi.settings')->get('stockapi_default_symbols');
+      if (\Drupal\Component\Utility\Unicode::strlen($default_symbols)) {
+        $default_symbols_array = explode(' ', $default_symbols);
+        $symbols = array_unique(array_merge($default_symbols_array, $symbols));
+      }
+
+      if (count($symbols)) {
+    $stocks = stockapi_fetch($symbols);
+    foreach ($stocks as $key => $stock) {
+      stockapi_save(_stockapi_to_object($stock));
+    }
+    \Drupal::moduleHandler()->invokeAll('stockapi_post_update', [$stocks]);
+    \Drupal::configFactory()->getEditable('stockapi.settings')->set('stockapi_fetch_last', REQUEST_TIME)->save();
+
+    \Drupal::cache()->delete('variables');
+  }
+}
+  }
+}
+
+/**
+ *  Create the basic StockAPI page.
+ */
+function stockapi_fetch_symbols() {
+  if (intval(\Drupal::config('stockapi.settings')->get('stockapi_fetch_first')) < 1) {
+    $symbols = array();
+    $default_symbols = \Drupal::config('stockapi.settings')->get('stockapi_default_symbols');
+    if (\Drupal\Component\Utility\Unicode::strlen($default_symbols)) {
+      $symbols = explode(' ', $default_symbols);
+    }
+    if (!count($symbols)) {
+      $symbols = stockapi_get_default_symbols();
+    }
+    $stocks = stockapi_fetch($symbols);
+    foreach ($stocks as $stock) {
+      $stock = _stockapi_to_object($stock);
+      stockapi_save($stock);
+    }
+    \Drupal::moduleHandler()->invokeAll('stockapi_post_update', [$stocks]);
+    \Drupal::configFactory()->getEditable('stockapi.settings')->set('stockapi_fetch_first', REQUEST_TIME)->save();
+    \Drupal::logger('stockapi')->notice(sprintf("Stock API has successfully loaded all default symbols: %s", strftime('Y-m-d H:i:s', REQUEST_TIME)), []);
+  }
+}
+
+
+/**
+ * Generate link to full quote for the stock sybol
+ *
+ * @param string $field
+ * @return string
+ */
+function stockapi_format_symbol($field, $title = '', $exchange = NULL) {
+  if (empty($exchange)) {
+    $result = db_query("SELECT exchange FROM {stockapi} WHERE symbol = :symbol", array(':symbol' => $field))->fetchField();
+    if (empty($result)) {
+      $exchange = 'TSE';
+    }
+    else {
+      $exchange = $result;
+    }
+  }
+  switch ($exchange) {
+    case 'NYSE':
+      $exchange = 'NYSE';
+    break;
+    case 'TSE':
+      $exchange = 'TSE';
+    break;
+    case 'Toronto Stock Exchange':
+      $exchange = 'TSE';
+    break;
+    case 'New York Stock Exchange':
+      $exchange = 'NYSE';
+    break;
+    case 'NASDAQ':
+      $exchange = 'NASDAQ';
+    break;
+    case '':
+      $exchange = 'TSE';
+    break;
+    case NULL:
+      $exchange = 'TSE';
+    break;
+    default:
+      $exchange = 'TSE';
+    break;
+  }
+
+  $options = ['query' => ['q' => $exchange . ':' . $field], 'attributes' => ['target' => '_blank', 'title' => (Unicode::strlen($title)) ? $title : $field]];
+  $url = Url::fromUri('http://finance.google.com/finance', $options);
+  $link = Link::fromTextAndUrl(Unicode::strtoupper($field), $url);
+  return $link;
+}
+
+/**
+ * Right-align data in the table cell
+ *
+ * @param string $field
+ * @return string
+ */
+function stockapi_format_align($field) {
+  return new FormattableMarkup('<span align="right">' . $field .'</span>', ['@field' => '$field']);
+}
+
+/**
+ * Format decimals
+ *
+ * @param string $field
+ * @return double
+ */
+function stockapi_format_decimals($field) {
+  return number_format(doubleval($field), \Drupal::config('stockapi.settings')->get('stockapi_decimals'));
+}
+
+/**
+ * Style the quote to show whether there's been an upward or downward trend
+ * on the stock quote
+ *
+ * @param string $field
+ * @return string
+ */
+function stockapi_format_change($field) {
+  // Add a style for the change field, so we can
+  // add color, up tick/down tick, ...etc.
+  $style = 'plus';
+  if ($field < 0) {
+    $style = 'minus';
+  }
+  return new FormattableMarkup('<span class="' . $style . '">' . $field . '</span>', ['@field' => '$field']);     
+}
