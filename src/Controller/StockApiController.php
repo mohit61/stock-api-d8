@@ -1,4 +1,5 @@
 <?php 
+
 /**
  * @file
  * Contains \Drupal\stockapi\Controller\StockApiController.
@@ -7,6 +8,7 @@
 namespace Drupal\stockapi\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use \Drupal\Core\Url;
 
 /**
  * StockApi Controller for the stockapi module.
@@ -33,51 +35,37 @@ class StockApiController extends ControllerBase {
       'last_trade_price_only' => [
         'data' => t('Last'),
         'field' => 's.last_trade_price_only',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       'chg' => [
         'data' => t('Change'),
         'field' => 's.chg',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       'pct_chg' => [
         'data' => t('%'),
         'field' => 's.pct_chg',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       'open' => [
         'data' => t('Updated'),
         'field' => 's.open',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       'volume' => [
         'data' => t('Volume'),
         'field' => 's.volume',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       'last_trade_date' => [
         'data' => t('Date'),
         'field' => 's.last_trade_date',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
       'last_trade_time' => [
         'data' => t('Time'),
         'field' => 's.last_trade_time',
-        'class' => [
-          'right'
-          ],
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
       ],
     ];
 
@@ -120,8 +108,7 @@ class StockApiController extends ControllerBase {
         '#header' => $header,
         '#rows' => $rows,
         '#attributes' => [
-        'width' => '100%',
-        'id' => 'stockapi-table'
+          'id' => 'stockapi-table'
         ],
         '#sticky' => TRUE,
         '#caption' => t('All available stock quotes.'),
