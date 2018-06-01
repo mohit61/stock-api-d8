@@ -8,7 +8,7 @@
 namespace Drupal\stockapi\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use \Drupal\Core\Url;
+use Drupal\Core\Url;
 
 /**
  * StockApi Controller for the stockapi module.
