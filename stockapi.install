@@ -574,7 +574,7 @@ function stockapi_uninstall() {
 /**
  * Delete the stockapi rows, 2.x needs them to be recreated, next cron run.
  */
-function hook_update_8101() {
+function stockapi_update_8101() {
   $result = db_truncate('stockapi')->execute();
   return $result;
 }
