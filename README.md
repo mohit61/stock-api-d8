@@ -8,7 +8,7 @@
 
 - Stock information from Alpha Vantage Realtime historical equity data is automatically updated, at an admin specified interval.
 
-- The updates for stock information are processed one symbol at a time for however many symbols, all the symbols will be processed during a stockapi cron job.
+- The updates for stock information are processed one symbol at a time for however many symbols, all the symbols will be processed during  a stockapi cron job.
 
 ### Installation
 
